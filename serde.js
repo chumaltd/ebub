@@ -20,12 +20,14 @@ export const enc = async (dataStr, key) => {
 }
 
 export const dec_json = async (jsonStr, key) => {
+    if (!key) return;
+
     const json = await dec(jsonStr, key);
-    return JSON.parse(json);
+    return json.length ? JSON.parse(json) : null;
 }
 
 export const dec = async (dataStr, key) => {
-    if (!key?.length) return;
+    if (!key) return;
 
     const byteData = Uint8Array.from(atob(dataStr), c => c.charCodeAt(0));
     const aes = {

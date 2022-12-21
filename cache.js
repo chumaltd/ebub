@@ -2,11 +2,11 @@
 export const stale_cache = function*(
     target,
     {
-        id = null,
+        id = 0,
         skip_sec = 300,
         margin_sec = 180,
         force = false
-    },
+    } = {},
     {
         attr = '_upd',
         fallback_id = 0,
