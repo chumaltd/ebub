@@ -20,7 +20,7 @@ export const stale_cache = function*(
         return false;
 
     const fetch_ts = Math.max(0, prev_timestamp - margin_sec * 1000);
-    if (prev_timestamp < now - dispose_hour * 3600 * 1000) {
+    if (force || prev_timestamp < now - dispose_hour * 3600 * 1000) {
         yield { id: fallback_id, timestamp: 0, full: true };
     } else if (prev_timestamp < now - fallback_min * 60 * 1000) {
         yield { id: fallback_id, timestamp: fetch_ts, full: false };
