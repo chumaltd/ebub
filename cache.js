@@ -28,3 +28,11 @@ export const stale_cache = function*(
         yield { id, timestamp: fetch_ts, full: false };
     }
 }
+
+// Return values without timestamp
+//
+export const filter_timestamp = (origin, attr = '_upd') => {
+    return Object.keys(origin)
+        .filter(k => k !== attr)
+        .map(k => origin[k])
+}
