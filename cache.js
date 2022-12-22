@@ -1,3 +1,8 @@
+export const cache_expired = (target, options = {}, defaults = {}) => {
+    const res = stale_cache(target, options, defaults)
+          .next();
+    return !res.done;
+}
 
 export const stale_cache = function*(
     target,
