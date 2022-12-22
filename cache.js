@@ -2,7 +2,7 @@
 export const stale_cache = function*(
     target,
     {
-        id = 0,
+        id = null,
         skip_sec = 300,
         margin_sec = 180,
         force = false
@@ -19,13 +19,27 @@ export const stale_cache = function*(
     if (!force && prev_timestamp > now - skip_sec * 1000)
         return false;
 
-    const fetch_ts = Math.max(0, prev_timestamp - margin_sec * 1000);
+    // Set margin against clock difference
+    const timestamp = Math.max(0, prev_timestamp - margin_sec * 1000);
+
     if (force || prev_timestamp < now - dispose_hour * 3600 * 1000) {
-        yield { id: fallback_id, timestamp: 0, full: true };
+        yield {
+            id: id !== null ? fallback_id : null,
+            timestamp: 0,
+            full: true
+        };
     } else if (prev_timestamp < now - fallback_min * 60 * 1000) {
-        yield { id: fallback_id, timestamp: fetch_ts, full: false };
+        yield {
+            id: id !== null ? fallback_id : null,
+            timestamp,
+            full: false
+        };
     } else {
-        yield { id, timestamp: fetch_ts, full: false };
+        yield {
+            id: id,
+            timestamp,
+            full: false
+        };
     }
 }
 
