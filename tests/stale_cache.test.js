@@ -92,10 +92,29 @@ Deno.test("Timestamp 1day+ ago returns timestamp: 0", () => {
 });
 
 Deno.test("Timestamp 0 returns noDone", () => {
-    console.log(`Now: ${new Date()}`);
     const ts = new Date(0).getTime();
     console.log(`_upd: ${new Date(ts)}`);
     const res = stale_cache({ _upd: ts }, { id: 1 }).next();
+    assertEquals(res.done, false);
+    assertEquals(res.value.id, 0);
+    assertEquals(res.value.timestamp, 0);
+    console.log(`Request DateTime: ${new Date(res.value.timestamp)}`);
+});
+
+Deno.test("No Timestamp returns noDone", () => {
+    let res = stale_cache({ _upd: null }, { id: 1 }).next();
+    assertEquals(res.done, false);
+    assertEquals(res.value.id, 0);
+    assertEquals(res.value.timestamp, 0);
+    console.log(`Request DateTime: ${new Date(res.value.timestamp)}`);
+
+    res = stale_cache({}, { id: 1 }).next();
+    assertEquals(res.done, false);
+    assertEquals(res.value.id, 0);
+    assertEquals(res.value.timestamp, 0);
+    console.log(`Request DateTime: ${new Date(res.value.timestamp)}`);
+
+    res = stale_cache([], { id: 1 }).next();
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
     assertEquals(res.value.timestamp, 0);

@@ -63,9 +63,19 @@ Deno.test("Timestamp 1day+ ago returns true", () => {
 });
 
 Deno.test("Timestamp 0 returns true", () => {
-    console.log(`Now: ${new Date()}`);
     const ts = new Date(0).getTime();
     console.log(`_upd: ${new Date(ts)}`);
     const res = cache_expired({ _upd: ts });
+    assertEquals(res, true);
+});
+
+Deno.test("No Timestamp returns true", () => {
+    let res = cache_expired({ _upd: null });
+    assertEquals(res, true);
+
+    res = cache_expired({});
+    assertEquals(res, true);
+
+    res = cache_expired([]);
     assertEquals(res, true);
 });

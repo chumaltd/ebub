@@ -1,9 +1,35 @@
+/**
+ *
+ * @param {Object} target - Object with timestamp
+ * @param {Object} [options] - Same as stale_cache()
+ * @param {Object} [defaults] - Same as stale_cache()
+ * @return {boolean}
+ */
 export const cache_expired = (target, options = {}, defaults = {}) => {
     const res = stale_cache(target, options, defaults)
           .next();
     return !res.done;
 }
 
+/**
+ * Check object timestamp and returns conditional parameters
+ *
+ * @param {Object} target - Object with timestamp
+ * @param {Object} [options]
+ * @param {any} [options.id] - If target data is fresh, returns itself.
+ * @param {Number} [options.skip_sec] - Duration before expire in seconds.
+ * @param {Number} [options.margin_sec] - Margin subtracting from object timestamp.
+ * @param {boolean} [options.force] - If true, always regard target as expired
+ * @param {Object} [defaults]
+ * @param {String} [defaults.attr] - Timestamp attribute inside target object
+ * @param {any} [defaults.fallback_id] - Stale object returns this instead of options.id
+ * @param {Number} [defaults.fallback_min] - Duration before using fallback ID in minutes.
+ * @param {Number} [defaults.dispose_hour] - Duration before returning timestamp 0 in hours.
+ * @return {Object} [response]
+ * @return {any} [response.id]
+ * @return {Number} [response.timestamp]
+ * @return {boolean} [response.full]
+ */
 export const stale_cache = function*(
     target,
     {
