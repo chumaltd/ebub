@@ -19,3 +19,7 @@ export const dispatch_with_ts = (
     new_state[attr] ||= (new Date()).getTime();
     store.dispatch(reducer(new_state));
 }
+
+export const get_body = (state, key) => {
+    return state[key]?._body;
+}
