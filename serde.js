@@ -39,6 +39,30 @@ export const dec = async (dataStr, key) => {
     return (new TextDecoder()).decode(byteRes);
 }
 
+/**
+ *
+ * @param {Uint8Array | string} keyGen
+ * @return {CryptoKey}
+ */
+export const key_gen = async (key) => {
+    let digest;
+    if (key instanceof Uint8Array) {
+        digest = key;
+    } else if (key.length) {
+        digest = await crypto.subtle.digest(
+            { name: 'SHA-256' },
+            (new TextEncoder()).encode(key)
+        );
+    }
+    if (!digest) return null;
+
+    return await crypto.subtle.importKey(
+        'raw',
+        digest,
+        { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']
+    );
+}
+
 // Fallback to JSON if structuredClone() is not provided.
 //
 export const deep_copy = (origin) => {
