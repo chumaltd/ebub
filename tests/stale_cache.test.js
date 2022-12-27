@@ -27,6 +27,7 @@ Deno.test("Current timestamp with 2 options", () => {
     let res = stale_cache({ _upd: ts }, { id: 1, force: true }).next();
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
+    assertEquals(res.value.full, true);
 
     res = stale_cache({ _upd: ts }, { id: 1, skip_sec: 360 }).next();
     assertEquals(res.done, true);
@@ -34,6 +35,7 @@ Deno.test("Current timestamp with 2 options", () => {
     res = stale_cache({ _upd: ts }, { id: 1, force: true, skip_sec: 360 }).next();
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
+    assertEquals(res.value.full, true);
 });
 
 Deno.test("Current timestamp with 3 options", () => {
@@ -42,6 +44,7 @@ Deno.test("Current timestamp with 3 options", () => {
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
     assertEquals(new Date(res.value.timestamp), new Date(0));
+    assertEquals(res.value.full, true);
 });
 
 Deno.test("Timestamp 5min+ ago returns noDone", () => {
@@ -52,6 +55,7 @@ Deno.test("Timestamp 5min+ ago returns noDone", () => {
     assertEquals(res.done, false);
     assertEquals(res.value.id, 1);
     assertEquals(new Date(res.value.timestamp), new Date(ts - 3 * 60 * 1000));
+    assertEquals(res.value.full, false);
     console.log(`Request DateTime: ${new Date(res.value.timestamp)}`);
 });
 
@@ -63,12 +67,14 @@ Deno.test("Timestamp 1hour+ ago returns id: 0", () => {
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
     assertEquals(new Date(res.value.timestamp), new Date(ts - 3 * 60 * 1000));
+    assertEquals(res.value.full, false);
 
     // skip_sec donesn't affect, force returns timestamp 0
     res = stale_cache({ _upd: ts }, { id: 1, skip_sec: 360, force: true }).next();
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
     assertEquals(new Date(res.value.timestamp), new Date(0));
+    assertEquals(res.value.full, true);
     console.log(`Request DateTime: ${new Date(res.value.timestamp)}`);
 
 });
@@ -80,6 +86,7 @@ Deno.test("Timestamp 1day+ ago returns timestamp: 0", () => {
     let res = stale_cache({ _upd: ts }, { id: 1 }).next();
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
+    assertEquals(res.value.full, true);
     assertEquals(new Date(res.value.timestamp), new Date(0));
 
     // skip_sec donesn't affect, force returns timestamp 0
@@ -87,6 +94,7 @@ Deno.test("Timestamp 1day+ ago returns timestamp: 0", () => {
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
     assertEquals(new Date(res.value.timestamp), new Date(0));
+    assertEquals(res.value.full, true);
     console.log(`Request DateTime: ${new Date(res.value.timestamp)}`);
 
 });
@@ -98,6 +106,7 @@ Deno.test("Timestamp 0 returns noDone", () => {
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
     assertEquals(res.value.timestamp, 0);
+    assertEquals(res.value.full, true);
     console.log(`Request DateTime: ${new Date(res.value.timestamp)}`);
 });
 
@@ -106,17 +115,20 @@ Deno.test("No Timestamp returns noDone", () => {
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
     assertEquals(res.value.timestamp, 0);
+    assertEquals(res.value.full, true);
     console.log(`Request DateTime: ${new Date(res.value.timestamp)}`);
 
     res = stale_cache({}, { id: 1 }).next();
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
     assertEquals(res.value.timestamp, 0);
+    assertEquals(res.value.full, true);
     console.log(`Request DateTime: ${new Date(res.value.timestamp)}`);
 
     res = stale_cache([], { id: 1 }).next();
     assertEquals(res.done, false);
     assertEquals(res.value.id, 0);
     assertEquals(res.value.timestamp, 0);
+    assertEquals(res.value.full, true);
     console.log(`Request DateTime: ${new Date(res.value.timestamp)}`);
 });
