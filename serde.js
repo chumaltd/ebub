@@ -1,3 +1,25 @@
+/**
+ *
+ * Save encrypted JSON into localStorage/sessionStorage.
+ * This function throws on WebCrypto errors by design.
+ *
+ */
+export const save_encrypted = async (
+    data,
+    storage_key_name,
+    crypto_key,
+    {
+        useLocalStorage = true
+    } = {}
+) => {
+    if(!storage_key_name?.length) return false;
+
+    const storable = await enc(JSON.stringify(data), crypto_key);
+    useLocalStorage
+        ? localStorage.setItem(storage_key_name, storable)
+        : sessionStorage.setItem(storage_key_name, storable);
+    return true;
+}
 
 export const enc = async (dataStr, key) => {
     const byteData = (new TextEncoder()).encode(dataStr);
