@@ -2,7 +2,12 @@
  *
  * Save encrypted JSON into localStorage/sessionStorage.
  * This function throws on WebCrypto errors by design.
- *
+ * @param {any} data
+ * @param {string} storage_key_name - key name for localStorage/sessionStorage
+ * @param {CryptoKey} crypto_key
+ * @param {Object} [options]
+ * @param {boolean} [options.useLocalStorage] - If false, use sessionStorage
+ * @return {boolean} - completed or not
  */
 export const save_encrypted = async (
     data,
@@ -21,6 +26,12 @@ export const save_encrypted = async (
     return true;
 }
 
+/**
+ *
+ * @param {string} dataStr - base string to be encrypted
+ * @param {CryptoKey} key
+ * @return {string}
+ */
 export const enc = async (dataStr, key) => {
     const byteData = (new TextEncoder()).encode(dataStr);
     const aes = {
@@ -41,10 +52,16 @@ export const enc = async (dataStr, key) => {
     return btoa(byteStr);
 }
 
-export const dec_json = async (jsonStr, key) => {
+/**
+ *
+ * @param {string} encrypted_json
+ * @param {CryptoKey} key
+ * @return {any} - decrypted and deserialized object
+ */
+export const dec_json = async (encrypted_json, key) => {
     if (!key) return;
 
-    const json = await dec(jsonStr, key);
+    const json = await dec(encrypted_json, key);
     return json.length ? JSON.parse(json) : null;
 }
 
