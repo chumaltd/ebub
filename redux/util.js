@@ -20,6 +20,14 @@ export const dispatch_with_ts = (
     store.dispatch(reducer(new_state));
 }
 
+/**
+ * Retrieve contents body from an object wrapped by the action refresh_with_ts()
+ *
+ * @type {import("redux").Store}
+ * @param {Store} store - Redux store object
+ * @param {string} key - Key name of the target slice
+ *
+ */
 export const get_body = (state, key) => {
     return state[key]?._body;
 }

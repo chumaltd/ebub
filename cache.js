@@ -74,8 +74,13 @@ export const stale_cache = function*(
     }
 }
 
-// Return values without timestamp
-//
+/**
+ * Return values without timestamp
+ *
+ * @param {Object} origin - Object with timestamp as a slice of Redux store
+ * @param {string} [attr] - Timestamp attribute inside target object
+ * @return {Array}
+ */
 export const filter_timestamp = (origin, attr = '_upd') => {
     return Object.keys(origin)
         .filter(k => k !== attr)

@@ -102,8 +102,10 @@ export const key_gen = async (key) => {
     );
 }
 
-// Fallback to JSON if structuredClone() is not provided.
-//
+/**
+ * Fallback to JSON if structuredClone() is not provided.
+ *
+ */
 export const deep_copy = (origin) => {
     try {
         return structuredClone(origin);
