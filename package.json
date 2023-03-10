@@ -1,0 +1,22 @@
+{
+  "name": "ebub",
+  "version": "1.0.0",
+  "description": "'ebub' is derived from 'data' by Caesar cipher with a right shift of 1. It should translate data in a not so cryptic way.",
+  "main": "mod.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chumaltd/ebub.git"
+  },
+  "author": "Chuma Takahiro",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/chumaltd/ebub/issues"
+  },
+  "homepage": "https://github.com/chumaltd/ebub#readme"
+}
