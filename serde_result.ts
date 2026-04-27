@@ -136,8 +136,6 @@ export const try_dec_json = async (
     encrypted_json: string,
     key: CryptoKey
 ): Promise<Result<unknown, SerdeError>> => {
-    if (!key) return Ok(undefined);
-
     const dec_result = await try_dec(encrypted_json, key);
     if (dec_result.isErr()) return dec_result;
     const json = dec_result.value;
@@ -190,7 +188,7 @@ export const try_dec = async (
  */
 export const try_key_gen = async (
     key: Uint8Array | string
-): Promise<Result<CryptoKey | null, SerdeError>> => {
+): Promise<Result<CryptoKey, SerdeError>> => {
     let digest: Uint8Array | ArrayBuffer | undefined;
     if (key instanceof Uint8Array) {
         digest = key;
