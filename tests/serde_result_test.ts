@@ -1,4 +1,4 @@
-import { assertEquals, assert } from "https://deno.land/std@0.166.0/testing/asserts.ts";
+import { assertEquals, assert } from "jsr:@std/assert@1";
 import {
     try_save_encrypted,
     try_enc,

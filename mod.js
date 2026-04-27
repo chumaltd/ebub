@@ -8,3 +8,9 @@ export {
     try_key_gen,
     try_deep_copy,
 } from './serde_result.ts';
+export {
+    try_get_item,
+    try_set_item,
+    try_remove_item,
+    try_clear,
+} from './storage.ts';

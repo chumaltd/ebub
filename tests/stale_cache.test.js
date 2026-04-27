@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.166.0/testing/asserts.ts";
+import { assertEquals } from "jsr:@std/assert@1";
 import { stale_cache } from '../cache.js';
 
 Deno.test("Current timestamp with no options", () => {

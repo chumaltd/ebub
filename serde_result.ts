@@ -1,4 +1,5 @@
 import { Result, Ok, Err } from 'ts-results-es';
+import { try_set_item } from './storage.ts';
 
 export type SerdeErrorKind =
     | 'json.stringify'
@@ -61,20 +62,8 @@ export const try_save_encrypted = async (
     if (enc_result.isErr()) return enc_result;
     const storable = enc_result.value;
 
-    let storage: Storage;
-    try {
-        storage = useLocalStorage ? localStorage : sessionStorage;
-    } catch (e) {
-        return Err(toErr('storage.access', e));
-    }
-
-    try {
-        storage.setItem(storage_key_name, storable);
-    } catch (e) {
-        const name = e instanceof Error ? e.name : '';
-        const isQuota = name === 'QuotaExceededError' || name === 'NS_ERROR_DOM_QUOTA_REACHED';
-        return Err(toErr(isQuota ? 'storage.quota' : 'storage.write', e));
-    }
+    const set_r = try_set_item(useLocalStorage ? 'localStorage' : 'sessionStorage', storage_key_name, storable);
+    if (set_r.isErr()) return Err(set_r.error as SerdeError);
     return Ok(true);
 };
 

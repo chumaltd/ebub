@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.166.0/testing/asserts.ts";
+import { assertEquals } from "jsr:@std/assert@1";
 import { key_gen } from '../serde.js';
 
 Deno.test("It accepts both string and digest", async () => {
