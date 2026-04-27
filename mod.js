@@ -2,6 +2,8 @@ export { cache_expired, stale_cache, filter_timestamp } from './cache.js';
 export { enc, dec_json, key_gen, deep_copy } from './serde.js';
 export {
     try_save_encrypted,
+    try_save_json,
+    try_load_json,
     try_enc,
     try_dec_json,
     try_dec,

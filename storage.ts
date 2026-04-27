@@ -20,7 +20,7 @@ const toErr = (kind: StorageErrorKind, e: unknown): StorageError => ({
     cause: e instanceof Error ? e : undefined,
 });
 
-type StorageRef = Storage | "sessionStorage" | "localStorage" | null | undefined;
+export type StorageRef = Storage | "sessionStorage" | "localStorage" | null | undefined;
 
 export const try_get_item = (storage: StorageRef, key: string): Result<string, StorageError> => {
   if (!key.length)

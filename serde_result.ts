@@ -1,5 +1,5 @@
 import { Result, Ok, Err } from 'ts-results-es';
-import { try_set_item } from './storage.ts';
+import { try_get_item, try_set_item, type StorageRef } from './storage.ts';
 
 export type SerdeErrorKind =
     | 'json.stringify'
@@ -14,6 +14,7 @@ export type SerdeErrorKind =
     | 'decode.text'
     | 'storage.key'
     | 'storage.access'
+    | 'storage.content'
     | 'storage.write'
     | 'storage.quota'
     | 'clone';
@@ -43,7 +44,7 @@ export const try_save_encrypted = async (
     storage_key_name: string,
     crypto_key: CryptoKey,
     { useLocalStorage = true }: { useLocalStorage?: boolean } = {}
-): Promise<Result<boolean, SerdeError>> => {
+): Promise<Result<void, SerdeError>> => {
     if (typeof storage_key_name !== 'string' || !storage_key_name.length) {
         return Err({
             kind: 'storage.key',
@@ -64,7 +65,59 @@ export const try_save_encrypted = async (
 
     const set_r = try_set_item(useLocalStorage ? 'localStorage' : 'sessionStorage', storage_key_name, storable);
     if (set_r.isErr()) return Err(set_r.error as SerdeError);
-    return Ok(true);
+    return Ok.EMPTY;
+};
+
+export const try_save_json = async (
+    data: unknown,
+    storage_key_name: string,
+    { useLocalStorage = true }: { useLocalStorage?: boolean } = {}
+): Promise<Result<void, SerdeError>> => {
+    if (typeof storage_key_name !== 'string' || !storage_key_name.length) {
+        return Err({
+            kind: 'storage.key',
+            message: 'storage_key_name must be a non-empty string',
+        });
+    }
+
+    let storable: string;
+    try {
+        storable = JSON.stringify(data);
+    } catch (e) {
+        return Err(toErr('json.stringify', e));
+    }
+
+    const set_r = try_set_item(useLocalStorage ? 'localStorage' : 'sessionStorage', storage_key_name, storable);
+    if (set_r.isErr()) return Err(set_r.error as SerdeError);
+    return Ok.EMPTY;
+};
+
+export const try_load_json = (
+    storage: StorageRef,
+    storage_key_name: string,
+): Result<unknown, SerdeError> => {
+    if (typeof storage_key_name !== 'string' || !storage_key_name.length) {
+        return Err({
+            kind: 'storage.key',
+            message: 'storage_key_name must be a non-empty string',
+        });
+    }
+
+    const json = try_get_item(storage, storage_key_name);
+    if (json.isErr()) return Err(json.error as SerdeError);
+    if (!json.value.length)
+      return Err({
+        kind: 'storage.content',
+        message: 'Content is empty'
+      });
+
+    let data;
+    try {
+        data = JSON.parse(json.value);
+    } catch (e) {
+        return Err(toErr('json.parse', e));
+    }
+    return Ok(data);
 };
 
 /**
