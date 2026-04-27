@@ -68,11 +68,11 @@ export const try_save_encrypted = async (
     return Ok.EMPTY;
 };
 
-export const try_save_json = async (
+export const try_save_json = (
     data: unknown,
     storage_key_name: string,
     { useLocalStorage = true }: { useLocalStorage?: boolean } = {}
-): Promise<Result<void, SerdeError>> => {
+): Result<void, SerdeError> => {
     if (typeof storage_key_name !== 'string' || !storage_key_name.length) {
         return Err({
             kind: 'storage.key',

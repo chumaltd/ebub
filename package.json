@@ -1,6 +1,6 @@
 {
   "name": "ebub",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "'ebub' is derived from 'data' by Caesar cipher with a right shift of 1. It should translate data in a not so cryptic way.",
   "main": "mod.js",
   "directories": {
