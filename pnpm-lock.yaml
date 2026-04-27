@@ -1,0 +1,22 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      ts-results-es:
+        specifier: ^7.0.0
+        version: 7.0.0
+
+packages:
+
+  ts-results-es@7.0.0:
+    resolution: {integrity: sha512-GuXPzBk1mE7QN4zo0KOHxQ+vrvjUqgMnwbKRF4ztrDQuI6CdOmPx43O+Y5BEgMIHQqVSd1rg5sIMnp+QDfBWuw==}
+
+snapshots:
+
+  ts-results-es@7.0.0: {}

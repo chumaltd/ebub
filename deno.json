@@ -1,0 +1,5 @@
+{
+    "imports": {
+        "ts-results-es": "node_modules/ts-results-es"
+    }
+}
